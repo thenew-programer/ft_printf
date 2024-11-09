@@ -1,0 +1,61 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   libftprintf.h                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ybouryal <ybouryal@student.1337.ma>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/11/06 10:23:35 by ybouryal          #+#    #+#             */
+/*   Updated: 2024/11/07 17:18:57 by ybouryal         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef LIBFTPRINTF_H
+# define LIBFTPRINTF_H
+
+# include <stdarg.h>
+# include <stdlib.h>
+# include <stddef.h>
+
+# define SPS "csdiuxXp%"
+# define TRUE 1
+# define FALSE 0
+# define T_TEXT 2
+# define T_SPEC 3
+
+typedef struct s_fmt_token
+{
+	char	*token;
+	char	*str;
+	int		type;
+	void	*data;
+	int		valid;
+	struct	s_fmt_token	*next;
+}	t_token;
+
+typedef struct s_spec
+{
+	char	specifier;
+	char	*(*eval)(const char *, void *);
+}	t_spec;
+
+typedef unsigned char	t_byte;
+
+/* main function */
+int	ft_printf(const char *, ...);
+
+/* Parser */
+t_token	*parse_fmt(const char *fmt, t_token **head);
+
+/* tokenizer */
+int		ft_tokensize(t_token *head);
+void	ft_tokenadd_back(t_token **head, t_token *new);
+t_token	*ft_tokenew(char *token, int type);
+t_token	*ft_tokenlast(t_token *head);
+void	ft_tokenclear(t_token **head, void (*del)(void *));
+void	ft_tokendelone(t_token *elem, void (*del)(void *));
+
+/* Helper functions.*/
+int	ft_strchar(char *str, int c);
+
+#endif
