@@ -1,34 +1,43 @@
-CC = cc
-AR = ar rcs
-RM = rm -f
-CFLAGS = -Wall -Werror -Wextra -c
-
-Lib_SRC = ${wildcard libft/*.c}
-LIB_OBJ = ${LIB_SRC:.c=.o}
-
-LIB = libft.a
-
-SRCS = ${wildcard src/*.c}
-OBJS = ${SRCS:.c=.o}
-
-NAME = libftprintf.a
-
-all: ${NAME}
-
-${NAME}:	${OBJS} ${libfd.a}
-					${AR} $@ $^
-
-.c.o:
-					${CC} ${CFLAGS} $< -o ${<:.c=.o}
+LIBFT_DIR	= libft
+SRCS_DIR	= src
+OBJS_DIR	= obj
+HEAD		= ./includes/
 
 
+LIBFT_LIB	= $(LIBFT_DIR)/libft.a
+SRCS		= $(wildcard $(SRCS_DIR)/*.c)
+OBJS		= $(patsubst $(SRCS_DIR)/%.c, $(OBJS_DIR)/%.o, $(SRCS))
+
+NAME		= libftprintf.a
+
+CC			= cc
+AR			= ar rcs
+RM			= rm
+CFLAGS		= -Wall -Werror -Wextra -I $(HEAD) -c
+
+all: $(NAME)
+
+$(NAME): $(OBJS) $(LIBFT_LIB)
+			@mv $(LIBFT_LIB) $(NAME)
+			$(AR) $(NAME) $(OBJS)
+
+$(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
+			@mkdir -p $(OBJS_DIR)
+			$(CC) $(CFLAGS) $< -o $@
+
+$(LIBFT_LIB):
+			@make -C $(LIBFT_DIR)
 
 clean:
-					${RM} *.o
+	$(RM) -rf $(OBJS_DIR)
+	@make clean -C $(LIBFT_DIR)
 
-fclean:		clean
-					${RM} ${NAME}
+fclean: clean
+	$(RM) -f $(NAME)
+	@make fclean -C $(LIBFT_DIR)
 
-re:			fclean	all
+re: fclean all
 
-.PHONY:	fclean clean all re
+.PHONY: all clean fclean re
+
+

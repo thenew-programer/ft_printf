@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   helper.c                                           :+:      :+:    :+:   */
+/*   helper_1.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybouryal <ybouryal@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/07 17:16:34 by ybouryal          #+#    #+#             */
-/*   Updated: 2024/11/07 17:17:21 by ybouryal         ###   ########.fr       */
+/*   Updated: 2024/11/11 10:13:38 by ybouryal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,27 +25,6 @@ int	ft_strchar(char *str, int c)
 		i++;
 	}
 	return (FALSE);
-}
-
-char	*putptr(t_byte *addr)
-{
-	char	*hex;
-	char	*buffer;
-	int		buf_idx;
-	int		i;
-
-	hex = "0123456789abcdef";
-	buf_idx = 0;
-	i = sizeof(void *) - 1;
-
-	while (i >= 0)
-	{
-		buffer[buf_idx++] = hex[(addr[i] >> 4) & 0xF];
-		buffer[buf_idx++] = hex[addr[i] & 0xF];
-		i--;
-	}
-	buffer[buf_idx] = '\0';
-	return (buffer);
 }
 
 size_t	ft_num_len(unsigned long nb, size_t base)
@@ -83,11 +62,12 @@ char	*ft_putptr(uintptr_t ptr)
 	return (buffer);
 }
 
-char	*print_hex(char *base, int num)
+char	*ft_print_hex(char *base, int num)
 {
 	char	*buffer;
 	int		numlen;
 	size_t	baselen;
+
 
 	baselen = ft_strlen(base);
 	numlen = ft_num_len(num, baselen);
@@ -101,4 +81,15 @@ char	*print_hex(char *base, int num)
 		num /= baselen;
 	}
 	return (buffer);
+}
+
+char	*ft_nil_str(void)
+{
+	char	*str;
+
+	str = (char *)malloc(sizeof(char) * 9);
+	if (!str)
+		return (NULL);
+	ft_strlcpy(str, "((null))", 9);
+	return (str);
 }

@@ -17,25 +17,30 @@ t_token	*parse_fmt(const char *fmt, t_token **head)
 {
 	int	i;
 	int	start;
-	int	len;
 
 	i = 0;
-	len = ft_strlen(fmt);
-	while (i < len)
+	while (fmt[i])
 	{
 		if (fmt[i] == '%')
 		{
-			ft_tokenadd_back(head, ft_tokenew(ft_substr(fmt, start, 1), T_SPEC));
-			i += 2;
+			if (fmt[i + 1])
+			{
+				ft_tokenadd_back(head, ft_tokenew(ft_substr(fmt, i, 2), T_SPEC));
+				i += 2;
+			}
+			else
+			{
+				ft_tokenadd_back(head, ft_tokenew(ft_substr(fmt, i, 1), T_TEXT));
+				i++;
+			}
 		}
 		else
 		{
 			start = i;
-			while (fmt[i] != '%' && i < len)
+			while (fmt[i] != '%' && fmt[i])
 				i++;
 			ft_tokenadd_back(head, ft_tokenew(ft_substr(fmt, start, i - start), T_TEXT));
 		}
-		i++;
 	}
 	return (*head);
 }

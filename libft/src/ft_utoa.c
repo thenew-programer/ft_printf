@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: ybouryal <ybouryal@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/10 12:03:01 by ybouryal          #+#    #+#             */
-/*   Updated: 2024/11/10 12:05:09 by ybouryal         ###   ########.fr       */
+/*   Created: 2024/10/24 10:49:26 by ybouryal          #+#    #+#             */
+/*   Updated: 2024/10/25 18:18:39 by ybouryal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int	numlen(unsigned int n)
+static int	numlen(int n)
 {
 	int	len;
 
@@ -29,8 +29,7 @@ static int	numlen(unsigned int n)
 
 static char	*_utoa(unsigned int n, char *buffer, size_t len)
 {
-	size_t	is_neg;
-	size_t	buf_idx;
+	int	buf_idx;
 
 	buf_idx = len - 1;
 	while (n)
