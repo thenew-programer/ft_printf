@@ -14,7 +14,6 @@
 
 void	ft_tokenadd_back(t_token **head, t_token *new)
 {
-
 	t_token	*last;
 
 	if (*head == NULL)

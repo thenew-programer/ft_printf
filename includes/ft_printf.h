@@ -10,13 +10,13 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LIBFTPRINTF_H
-# define LIBFTPRINTF_H
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
 
 # include <stdarg.h>
 # include <stdlib.h>
 # include <stddef.h>
-#include <stdint.h>
+# include <stdint.h>
 
 # define SPS "csdiuxXp%"
 # define TRUE 1
@@ -35,12 +35,12 @@ typedef union u_spec_data
 
 typedef struct s_fmt_token
 {
-	char		*token;
-	char		*str;
-	int			strlen;
-	int			type;
-	t_spec_data	data;
-	struct	s_fmt_token	*next;
+	char				*token;
+	char				*str;
+	int					strlen;
+	int					type;
+	t_spec_data			data;
+	struct s_fmt_token	*next;
 }	t_token;
 
 typedef struct s_spec
@@ -50,7 +50,7 @@ typedef struct s_spec
 }	t_spec;
 
 /* main function */
-int		ft_printf(const char *, ...);
+int		ft_printf(const char *fmt, ...);
 
 /* Parser */
 t_token	*parse_fmt(const char *fmt, t_token **head);
@@ -68,6 +68,7 @@ int		ft_strchar(char *str, int c);
 char	*ft_putptr(uintptr_t ptr);
 size_t	ft_num_len(unsigned long nb, size_t base);
 char	*ft_print_hex(char *base, unsigned int num);
+int		ft_print_str(char *str, int length);
 
 /* specifier's functions*/
 char	*eval_char(const char *token, t_spec_data data);
@@ -78,5 +79,7 @@ char	*eval_ptr(const char *token, t_spec_data data);
 char	*eval_hex(const char *token, t_spec_data data);
 char	*eval_HEX(const char *token, t_spec_data data);
 char	*eval_percent(const char *token, t_spec_data data);
+char	*eval_spec(const char *token, t_spec_data data, t_spec *specs);
+t_token	*eval_fmt(t_token **head, t_spec *specs);
 
 #endif

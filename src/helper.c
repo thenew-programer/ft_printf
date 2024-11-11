@@ -70,7 +70,6 @@ char	*ft_print_hex(char *base, unsigned int num)
 	int		numlen;
 	size_t	baselen;
 
-
 	if (num == 0)
 		return (ft_strdup("0"));
 	baselen = ft_strlen(base);
