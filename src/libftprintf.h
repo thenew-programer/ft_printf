@@ -6,7 +6,7 @@
 /*   By: ybouryal <ybouryal@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/06 10:23:35 by ybouryal          #+#    #+#             */
-/*   Updated: 2024/11/07 17:18:57 by ybouryal         ###   ########.fr       */
+/*   Updated: 2024/11/10 12:27:57 by ybouryal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdarg.h>
 # include <stdlib.h>
 # include <stddef.h>
+#include <stdint.h>
 
 # define SPS "csdiuxXp%"
 # define TRUE 1
@@ -27,6 +28,7 @@ typedef struct s_fmt_token
 {
 	char	*token;
 	char	*str;
+	int		strlen;
 	int		type;
 	void	*data;
 	int		valid;
@@ -57,5 +59,18 @@ void	ft_tokendelone(t_token *elem, void (*del)(void *));
 
 /* Helper functions.*/
 int	ft_strchar(char *str, int c);
+char	*ft_putptr(uintptr_t ptr);
+size_t	ft_num_len(unsigned long nb, size_t base);
+char	*print_hex(char *base, int num);
+
+/* specifier's functions*/
+char	*eval_char(const char *token, void *data);
+char	*eval_str(const char *token, void *data);
+char	*eval_int(const char *token, void *data);
+char	*eval_uint(const char *token, void *data);
+char	*eval_ptr(const char *token, void *data);
+char	*eval_hex(const char *token, void *data);
+char	*eval_HEX(const char *token, void *data);
+char	*eval_percent(const char *token, void *data);
 
 #endif

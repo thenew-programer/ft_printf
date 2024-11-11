@@ -6,7 +6,7 @@
 /*   By: ybouryal <ybouryal@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/22 18:38:35 by ybouryal          #+#    #+#             */
-/*   Updated: 2024/11/06 10:24:28 by ybouryal         ###   ########.fr       */
+/*   Updated: 2024/11/10 12:05:55 by ybouryal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,6 +179,17 @@ char	**ft_split(char const *s, char c);
  * 			NULL if the allocation fails.
 */
 char	*ft_itoa(int n);
+
+/*
+ * Desc:	Allocates and returns string representing the integer
+ * 			received as an argument. Negative numbes included.
+ *
+ * @n:		The unsigned integer to convert
+ *
+ * return:	The string representing the integer.
+ * 			NULL if the allocation fails.
+*/
+char	*ft_utoa(unsigned int n);
 
 /**
  * Desc:	Applies the function f to each character of the

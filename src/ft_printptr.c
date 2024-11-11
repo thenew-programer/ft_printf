@@ -24,5 +24,3 @@ int	ft_nbrlen(uintptr_t ptr, int base)
 	}
 	return (len);
 }
-
-char	*ft_printptr(char)

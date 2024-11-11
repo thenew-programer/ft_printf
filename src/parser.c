@@ -21,7 +21,6 @@ t_token	*parse_fmt(const char *fmt, t_token **head)
 
 	i = 0;
 	len = ft_strlen(fmt);
-	start = i;
 	while (i < len)
 	{
 		if (fmt[i] == '%')
