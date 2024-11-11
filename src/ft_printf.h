@@ -24,21 +24,29 @@
 # define T_TEXT 2
 # define T_SPEC 3
 
+typedef union u_spec_data
+{
+	int				i;
+	char			c;
+	unsigned int	u;
+	char			*str;
+	void			*ptr;
+}	t_spec_data;
+
 typedef struct s_fmt_token
 {
-	char	*token;
-	char	*str;
-	int		strlen;
-	int		type;
-	void	*data;
-	int		valid;
+	char		*token;
+	char		*str;
+	int			strlen;
+	int			type;
+	t_spec_data	data;
 	struct	s_fmt_token	*next;
 }	t_token;
 
 typedef struct s_spec
 {
 	char	specifier;
-	char	*(*eval)(const char *, void *);
+	char	*(*eval)(const char *, t_spec_data);
 }	t_spec;
 
 /* main function */
@@ -59,17 +67,16 @@ void	ft_tokendelone(t_token *elem, void (*del)(void *));
 int		ft_strchar(char *str, int c);
 char	*ft_putptr(uintptr_t ptr);
 size_t	ft_num_len(unsigned long nb, size_t base);
-char	*ft_print_hex(char *base, int num);
-char	*ft_nil_str(void);
+char	*ft_print_hex(char *base, unsigned int num);
 
 /* specifier's functions*/
-char	*eval_char(const char *token, void *data);
-char	*eval_str(const char *token, void *data);
-char	*eval_int(const char *token, void *data);
-char	*eval_uint(const char *token, void *data);
-char	*eval_ptr(const char *token, void *data);
-char	*eval_hex(const char *token, void *data);
-char	*eval_HEX(const char *token, void *data);
-char	*eval_percent(const char *token, void *data);
+char	*eval_char(const char *token, t_spec_data data);
+char	*eval_str(const char *token, t_spec_data data);
+char	*eval_int(const char *token, t_spec_data data);
+char	*eval_uint(const char *token, t_spec_data data);
+char	*eval_ptr(const char *token, t_spec_data data);
+char	*eval_hex(const char *token, t_spec_data data);
+char	*eval_HEX(const char *token, t_spec_data data);
+char	*eval_percent(const char *token, t_spec_data data);
 
 #endif

@@ -10,40 +10,44 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
+#include "ft_printf.h"
+#include "libft.h"
 
-char	*eval_ptr(const char *token, void *data)
+char	*eval_ptr(const char *token, t_spec_data data)
 {
 	char	*str;
 
-	str = ft_putptr((uintptr_t)data);
+	(void)token;
+	if (!data.ptr)
+		return (ft_strdup("(nil)"));
+	str = ft_putptr((uintptr_t)data.ptr);
 	return (str);
 }
 
-char	*eval_hex(const char *token, void *data)
+char	*eval_hex(const char *token, t_spec_data data)
 {
 	char	*str;
 
-	if (!data)
-		return (NULL);
-	str = print_hex("0123456789abcdef", (intptr_t)data);
+	(void)token;
+	str = ft_print_hex("0123456789abcdef", data.u);
 	return (str);
 }
 
-char	*eval_HEX(const char *token, void *data)
+char	*eval_HEX(const char *token, t_spec_data data)
 {
 	char	*str;
 
-	if (!data)
-		return (NULL);
-	str = print_hex("0123456789ABCDEF", (intptr_t)data);
+	(void)token;
+	str = ft_print_hex("0123456789ABCDEF", data.u);
 	return (str);
 }
 
-char	*eval_percent(const char *token, void *data)
+char	*eval_percent(const char *token, t_spec_data data)
 {
 	char	*str;
 
+	(void)token;
+	(void)data;
 	str = (char *)malloc(sizeof(char) * 2);
 	if (!str)
 		return (NULL);

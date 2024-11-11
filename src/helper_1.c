@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
+#include "ft_printf.h"
 #include "libft.h"
 
 int	ft_strchar(char *str, int c)
@@ -32,6 +32,8 @@ size_t	ft_num_len(unsigned long nb, size_t base)
 	size_t	len;
 
 	len = 0;
+	if (nb == 0)
+		return (1);
 	while (nb)
 	{
 		nb /= base;
@@ -62,13 +64,15 @@ char	*ft_putptr(uintptr_t ptr)
 	return (buffer);
 }
 
-char	*ft_print_hex(char *base, int num)
+char	*ft_print_hex(char *base, unsigned int num)
 {
 	char	*buffer;
 	int		numlen;
 	size_t	baselen;
 
 
+	if (num == 0)
+		return (ft_strdup("0"));
 	baselen = ft_strlen(base);
 	numlen = ft_num_len(num, baselen);
 	buffer = (char *)malloc(sizeof(char) * (numlen + 1));
@@ -81,15 +85,4 @@ char	*ft_print_hex(char *base, int num)
 		num /= baselen;
 	}
 	return (buffer);
-}
-
-char	*ft_nil_str(void)
-{
-	char	*str;
-
-	str = (char *)malloc(sizeof(char) * 9);
-	if (!str)
-		return (NULL);
-	ft_strlcpy(str, "((null))", 9);
-	return (str);
 }

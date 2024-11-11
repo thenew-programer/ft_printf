@@ -1,6 +1,7 @@
 LIBFT_DIR	= libft
 SRCS_DIR	= src
 OBJS_DIR	= obj
+TEST_DIR	= tests
 HEAD		= ./includes/
 
 
@@ -38,6 +39,10 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+norm:
+	@norminette $(LIBFT_DIR) $(SRCS_DIR) | grep -v Norme -B1 || true
 
+test:
+	@make -C $(TEST_DIR)
 
+.PHONY: all clean fclean re norm

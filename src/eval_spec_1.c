@@ -11,40 +11,44 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "libftprintf.h"
+#include "ft_printf.h"
 
-char	*eval_char(const char *token, void *data)
+char	*eval_char(const char *token, t_spec_data data)
 {
 	char	*str;
 
+	(void)token;
 	str = (char *)malloc(sizeof(char) * 2);
 	if (!str)
 		return (NULL);
-	str[0] = *((char *)data);
+	str[0] = data.c;
 	str[1] = '\0';
 	return (str);
 }
 
-char	*eval_str(const char *token, void *data)
+char	*eval_str(const char *token, t_spec_data data)
 {
 	char	*str;
 
-	str = ft_strdup((char *)data);
+	(void)token;
+	str = ft_strdup(data.str);
 	return (str);
 }
 
-char	*eval_int(const char *token, void *data)
+char	*eval_int(const char *token, t_spec_data data)
 {
 	char	*str;
 
-	str = ft_itoa(*((int *)data));
+	(void)token;
+	str = ft_itoa(data.i);
 	return (str);
 }
 
-char	*eval_uint(const char *token, void *data)
+char	*eval_uint(const char *token, t_spec_data data)
 {
 	char	*str;
 
-	str = ft_utoa(*((unsigned int *)data));
+	(void)token;
+	str = ft_utoa(data.u);
 	return (str);
 }

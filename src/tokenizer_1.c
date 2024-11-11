@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libftprintf.h"
+#include "ft_printf.h"
 
 t_token	*ft_tokenew(char *token, int type)
 {
@@ -22,7 +22,6 @@ t_token	*ft_tokenew(char *token, int type)
 	new->token = token;
 	new->str = NULL;
 	new->next = NULL;
-	new->data = NULL;
 	new->type = type;
 	return (new);
 }

@@ -12,13 +12,11 @@
 
 #include "libft.h"
 
-static int	numlen(int n)
+static int	numlen(unsigned int n)
 {
 	int	len;
 
 	len = 0;
-	if (n == 0)
-		return (1);
 	while (n)
 	{
 		n /= 10;
@@ -27,7 +25,7 @@ static int	numlen(int n)
 	return (len);
 }
 
-static char	*_utoa(unsigned int n, char *buffer, size_t len)
+static char	*_utoa(unsigned int n, char *buffer, int len)
 {
 	int	buf_idx;
 
@@ -45,16 +43,13 @@ char	*ft_utoa(unsigned int n)
 	char	*number;
 	int		len;
 
+	if (n == 0)
+		return (ft_strdup("0"));
 	len = numlen(n);
 	number = (char *)malloc(sizeof(char) * (len + 1));
 	if (!number)
 		return (NULL);
-	number[len] = 0;
-	if (n == 0)
-	{
-		number[0] = '0';
-		return (number);
-	}
+	number[len] = '\0';
 	_utoa(n, number, len);
 	return (number);
 }

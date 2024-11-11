@@ -11,10 +11,9 @@
 /* ************************************************************************** */
 
 #include "libft.h"
-#include "libftprintf.h"
-#include <stdio.h>
+#include "ft_printf.h"
 
-char	*eval_spec(const char *token, void	*data, t_spec *specs)
+char	*eval_spec(const char *token, t_spec_data data, t_spec *specs)
 {
 	int		len;
 	char	*str;
@@ -28,7 +27,7 @@ char	*eval_spec(const char *token, void	*data, t_spec *specs)
 		{
 			str = specs[i].eval(token, data);
 			if (!str)
-				return (ft_nil_str());
+				return (ft_strdup("(null)"));
 			return (str);
 		}
 		i++;
@@ -39,7 +38,6 @@ char	*eval_spec(const char *token, void	*data, t_spec *specs)
 t_token	*eval_fmt(t_token **head, t_spec *specs)
 {
 	t_token *curr;
-	t_token	*tmp;
 
 	curr = *head;
 	while (curr)
@@ -64,14 +62,29 @@ t_token	*eval_fmt(t_token **head, t_spec *specs)
 	return (*head);
 }
 
-void	assign_args(const char *fmt, t_token *head, va_list args)
+void	assign_args(t_token *head, va_list args)
 {
+	size_t	len;
+	char	*token;
+
 	while (head)
 	{
+		token = head->token;
+		len = ft_strlen(head->token);
 		if (head->type == T_SPEC)
-			head->data = va_arg(args, void *);
-		else
-			head->data = NULL;
+		{
+			if (token[len - 1] == 'd'  || token[len - 1] == 'i')
+				head->data.i = va_arg(args, int);
+			else if (token[len - 1] == 'u'  || token[len - 1] == 'x'
+				|| token[len - 1] == 'X')
+				head->data.u = va_arg(args, unsigned int);
+			else if (token[len - 1] == 'c')
+				head->data.c = va_arg(args, int);
+			else if (token[len - 1] == 's')
+				head->data.str = va_arg(args, char *);
+			else
+				head->data.ptr = va_arg(args, void *);
+		}
 		head = head->next;
 	}
 	va_end(args);
@@ -109,7 +122,6 @@ void	init_spec(t_spec *specs)
 int	ft_printf(const char *fmt, ...)
 {
 	t_token	*tokens;
-	t_token	*tmp;
 	t_spec	specs[10];
 	va_list args;
 	int		printlen;
@@ -117,14 +129,8 @@ int	ft_printf(const char *fmt, ...)
 	tokens = NULL;
 	init_spec(specs);
 	parse_fmt(fmt, &tokens);
-	tmp = tokens;
-	// while (tmp)
-	// {
-	// 	printf("token = %s\n", tmp->token);
-	// 	tmp = tmp->next;
-	// }
 	va_start(args, fmt);
-	assign_args(fmt, tokens, args);
+	assign_args(tokens, args);
 	tokens = eval_fmt(&tokens, specs);
 	if (!tokens)
 		return (0);
