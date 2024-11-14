@@ -13,57 +13,80 @@
 #include "libft.h"
 #include "ft_printf_bonus.h"
 
-t_token	*parse_fmt(const char *fmt, t_token **head)
+static void	parse_specifier(const char **fmt, char *specifier)
 {
-	int	i;
-	int	start;
-
-	i = 0;
-	while (fmt[i])
+	if (ft_strchr(SPECS, **fmt))
 	{
-		start = i;
-		if (fmt[i] == '%')
+		*specifier = **fmt;
+		(*fmt)++;
+	}
+}
+static void	parse_precision(const char **fmt, t_flags *f)
+{
+	f->precision = 0;
+	if (**fmt == '.')
+	{
+		(*fmt)++;
+		while (ft_isdigit(**fmt))
 		{
-			while (!ft_strchar(SPS, fmt[i]) && fmt[i])
-				i++;
-			ft_tokenadd_back(head, ft_tokenew(ft_substr(fmt, start, i - start), T_SPEC));
+			f->precision = (f->precision * 10) + (**fmt - '0');
+			(*fmt)++;
+		}
+	}
+	else
+		f->precision = -1;
+}
+
+static void	parse_flags(const char **fmt, t_flags *f)
+{
+	while (**fmt != '.' && !ft_strchr(SPECS, **fmt))
+	{
+		if (ft_strchr(FLAGS, **fmt))
+		{
+			if (**fmt == '-')
+				f->flags |= FLAG_MINUS;
+			if (**fmt == '+')
+				f->flags |= FLAG_PLUS;
+			if (**fmt == '0')
+				f->flags |= FLAG_ZERO;
+			if (**fmt == ' ')
+				f->flags |= FLAG_SPACE;
+			if (**fmt == '#')
+				f->flags |= FLAG_HASH;
+		}
+		while (ft_isdigit(**fmt))
+		{
+			f->width = (f->width * 10) + (**fmt - '0');
+			(*fmt)++;
+		}
+		(*fmt)++;
+	}
+}
+
+void	parse_fmt(const char *fmt, t_token **head)
+{
+	int		end;
+	t_token	*node;
+
+	while (*fmt)
+	{
+		if (*fmt == '%')
+		{
+			fmt++;
+			node = ft_tokenew(T_SPEC);
+			parse_flags(&fmt, &node->f);
+			parse_precision(&fmt, &node->f);
+			parse_specifier(&fmt, &node->specifier);
 		}
 		else
 		{
-			while (fmt[i] != '%' && fmt[i])
-				i++;
-			ft_tokenadd_back(head, ft_tokenew(ft_substr(fmt, start, i - start),
-					T_TEXT));
+			end = 0;
+			while (fmt[end] && fmt[end] != '%')
+				end++;
+			node = ft_tokenew(T_TEXT);
+			node->str = ft_substr(fmt, 0, end);
+			fmt += end;
 		}
-	}
-	return (*head);
-}
-
-void	parse_token(t_token *head)
-{
-	int	i;
-
-	while (head)
-	{
-		i = 1;
-		while (head->token[i] != '.' && !ft_strchar(SPS, head->token[i]))
-		{
-			if (head->token[i] == '-')
-				head->flags.minus = ft_atoi(&head->token[i + 1]);
-			else if (head->token[i] == '+')
-				head->flags.plus = TRUE;
-			else if (head->token[i] == '0' && !ft_isdigit(head->token[i - 1]))
-				head->flags.zero = ft_atoi(&head->token[i + 1]);
-			else if (head->token[i] == ' ')
-				head->flags.space = TRUE;
-			else if (head->token[i] == '#')
-				head->flags.hash = TRUE;
-			else if (head->token[i + 1] == '.')
-				head->flags.precision = ft_atoi(&head->token[i + 1]);
-			else
-				head->flags.width = ft_atoi(&head->token[i]);
-			i++;
-		}
-		head = head->next;
+		ft_tokenadd_back(head, node);
 	}
 }

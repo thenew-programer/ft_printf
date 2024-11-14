@@ -10,31 +10,28 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include <stdio.h>
 #include "ft_printf_bonus.h"
 
 void	assign_args(t_token *head, va_list args)
 {
-	size_t	len;
-	char	*token;
+	char	sp;
 
 	while (head)
 	{
-		token = head->token;
-		len = ft_strlen(token);
+		sp = head->specifier;
 		if (head->type == T_SPEC)
 		{
-			if (token[len - 1] == 'd' || token[len - 1] == 'i')
+			if (sp == 'd' || sp == 'i')
 				head->data.i = va_arg(args, int);
-			else if (token[len - 1] == 'u' || token[len - 1] == 'x'
-				|| token[len - 1] == 'X')
+			else if (sp == 'u' || sp == 'x'
+				|| sp == 'X')
 				head->data.u = va_arg(args, unsigned int);
-			else if (token[len - 1] == 'c')
+			else if (sp == 'c')
 				head->data.c = va_arg(args, int);
-			else if (token[len - 1] == 's')
+			else if (sp == 's')
 				head->data.str = va_arg(args, char *);
-			else if (token[len - 1] == 'p')
+			else if (sp == 'p')
 				head->data.ptr = va_arg(args, void *);
 		}
 		head = head->next;
@@ -51,9 +48,9 @@ int	print_res(t_token *head)
 	while (head)
 	{
 		curr = head;
-		if (curr->strlen == 0 && curr->token[1] == 'c')
-			curr->strlen++;
-		len += write(1, curr->str, curr->strlen);
+		if (curr->len == 0 && curr->specifier == 'c')
+			curr->len++;
+		len += write(1, curr->str, curr->len);
 		head = head->next;
 	}
 	return (len);
@@ -78,20 +75,25 @@ int	ft_printf(const char *fmt, ...)
 	t_token	*tokens;
 	t_token	*tmp;
 	t_spec	specs[10];
-	va_list	args;
+	// va_list	args;
 	int		printlen;
 
-	printlen = 0;
 	if (!fmt)
 		return (-1);
 	tokens = NULL;
 	init_spec(specs);
 	parse_fmt(fmt, &tokens);
-	parse_token(tokens);
 	tmp = tokens;
 	while (tmp)
 	{
-		printf("%s\n", tmp->token);
+		if (tmp->type == T_TEXT)
+			printf("str = %s\n", tmp->str);
+		else
+		{
+			printf("specifier: %c\n", tmp->specifier);
+			printf("width:     %d\n", tmp->f.width);
+			printf("precision: %d\n", tmp->f.precision);
+		}
 		tmp = tmp->next;
 	}
 	/*
@@ -103,5 +105,5 @@ int	ft_printf(const char *fmt, ...)
 	printlen = print_res(tokens);
 	ft_tokenclear(&tokens, free);
 	*/
-	return (printlen);
+	return (printlen = 0, printlen);
 }

@@ -51,21 +51,17 @@ char	*eval_percent(const char *token, t_spec_data data)
 	return (str);
 }
 
-char	*eval_spec(const char *token, t_spec_data data, t_spec *specs)
+char	*eval_spec(char sp, t_spec_data data, t_spec *specs)
 {
-	int		len;
 	char	*str;
 	int		i;
 
-	len = ft_strlen(token);
-	if (len == 0)
-		len = 1;
 	i = 0;
 	while (specs[i].specifier != 0)
 	{
-		if (token[len - 1] == specs[i].specifier)
+		if (sp == specs[i].specifier)
 		{
-			str = specs[i].eval(token, data);
+			str = specs[i].eval(&sp, data);
 			if (!str)
 				return (ft_strdup("(null)"));
 			return (str);
@@ -84,19 +80,12 @@ t_token	*eval_fmt(t_token **head, t_spec *specs)
 	{
 		if (curr->type == T_SPEC)
 		{
-			curr->str = eval_spec(curr->token, curr->data, specs);
-			if (!curr->str)
-			{
-				curr->str = curr->token;
-				curr->token = NULL;
-			}
+			curr->str = eval_spec(curr->specifier, curr->data, specs);
+			// if (!curr->str)
+				// curr->str = curr->token;
+				// curr->token = NULL;
 		}
-		else
-		{
-			curr->str = curr->token;
-			curr->token = NULL;
-		}
-		curr->strlen = ft_strlen(curr->str);
+		curr->len = ft_strlen(curr->str);
 		curr = curr->next;
 	}
 	return (*head);

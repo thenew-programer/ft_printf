@@ -85,3 +85,51 @@ char	*ft_print_hex(char *base, unsigned int num)
 	}
 	return (buffer);
 }
+
+void	handle_width(t_token *elem)
+{
+	char	*width;
+	char	*tmp;
+
+	if (elem->f.width <= 0)
+		return ;
+	width = (char *)malloc(sizeof(char) * (elem->f.width + 1));
+	if (!width)
+	  return ;
+	width[elem->f.width] = '\0';
+	if ((elem->f.flags & FLAG_ZERO) == FLAG_ZERO)
+		ft_memset(width, 48, elem->f.width);
+	else
+		ft_memset(width, 32, elem->f.width);
+	tmp = elem->str;
+	if ((elem->f.flags & FLAG_MINUS) == FLAG_MINUS)
+		elem->str = ft_strjoin(elem->str, width);
+	else
+		elem->str = ft_strjoin(width, elem->str);
+	free(tmp);
+}
+
+void	handle_precision(t_token *elem)
+{
+	char	*precision;
+	char	*tmp;
+
+	if (precision <= 0)
+		return ;
+	precision = (char *)malloc(sizeof(char) * (elem->f.precision + 2));
+	if (!precision)
+		return ;
+	tmp = elem->str;
+	if (ft_strchr("diu", elem->specifier))
+	{
+		precision[0] = '.';
+		precision[elem->f.precision + 1] = '\0';
+		ft_memset(precision + 1, '0', elem->f.precision);
+		elem->str = ft_strjoin(tmp, precision);
+	}
+	else if (ft_strchr("s", elem->specifier))
+	{
+
+	}
+	free(tmp);
+}

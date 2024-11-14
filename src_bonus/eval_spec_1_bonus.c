@@ -13,7 +13,7 @@
 #include "libft.h"
 #include "ft_printf_bonus.h"
 
-char	*eval_char(const char *token, t_spec_data data)
+char	*eval_char(t_token *elem, t_spec_data data)
 {
 	char	*str;
 

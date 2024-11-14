@@ -12,18 +12,18 @@
 
 #include "ft_printf_bonus.h"
 
-t_token	*ft_tokenew(char *token, int type)
+t_token	*ft_tokenew(int type)
 {
 	t_token	*new;
 
 	new = (t_token *)malloc(sizeof(t_token));
 	if (!new)
 		return (NULL);
-	new->token = token;
-	new->str = NULL;
-	new->next = NULL;
 	new->type = type;
-	new->flags = (t_flag){-1};
+	new->str = NULL;
+	new->specifier = 0;
+	new->f = (t_flags){0, 0, 0 };
+	new->next = NULL;
 	return (new);
 }
 

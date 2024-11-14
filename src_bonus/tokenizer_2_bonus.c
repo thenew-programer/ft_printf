@@ -32,8 +32,6 @@ void	ft_tokendelone(t_token *elem, void (*del)(void *))
 	{
 		if (elem->str)
 			del(elem->str);
-		if (elem->token)
-			del(elem->token);
 	}
 	elem->next = NULL;
 	free(elem);
