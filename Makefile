@@ -29,6 +29,8 @@ $(OBJS_DIR)/%.o: $(SRCS_DIR)/%.c
 $(LIBFT_LIB):
 			@make -C $(LIBFT_DIR)
 
+bonus:	$(NAME)
+
 clean:
 	$(RM) -rf $(OBJS_DIR)
 	@make clean -C $(LIBFT_DIR)
