@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "ft_printf_bonus.h"
+#include <stdio.h>
 #include "libft.h"
 
 void	eval_ptr(t_token *elem)
@@ -30,7 +31,7 @@ void	eval_hex(t_token *elem)
 
 	if (elem->specifier == 'x')
 		elem->str = ft_print_hex("0123456789abcdef", elem->data.u);
-	else
+	else if (elem->specifier == 'X')
 		elem->str = ft_print_hex("0123456789ABCDEF", elem->data.u);
 	if ((elem->f.flags & FLAG_ZERO) == FLAG_ZERO)
 		handle_width(elem);
@@ -64,7 +65,10 @@ void	eval_spec(t_token *elem, t_spec *specs)
 	while (specs[i].specifier != 0)
 	{
 		if (elem->specifier == specs[i].specifier)
+		{
 			specs[i].eval(elem);
+			return ;
+		}
 		i++;
 	}
 }
@@ -80,6 +84,7 @@ t_token	*eval_fmt(t_token **head, t_spec *specs)
 			eval_spec(curr, specs);
 		if (curr->str)
 			curr->len = ft_strlen(curr->str);
+		printf("%s", curr->str);
 		curr = curr->next;
 	}
 	return (*head);

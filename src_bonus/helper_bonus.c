@@ -106,11 +106,11 @@ void	handle_width(t_token *elem)
 	else
 		ft_memset(width, 32, len);
 	tmp = elem->str;
-	if ((elem->f.flags & FLAG_MINUS) == FLAG_MINUS
-		&&(elem->f.flags & FLAG_ZERO) != FLAG_ZERO)
+	if ((elem->f.flags & FLAG_MINUS) == FLAG_MINUS)
 		elem->str = ft_strjoin(elem->str, width);
 	else
 		elem->str = ft_strjoin(width, elem->str);
+	free(width);
 	free(tmp);
 }
 

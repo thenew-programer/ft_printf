@@ -55,7 +55,10 @@ re: fclean all
 norm:
 								@norminette $(LIBFT_DIR) $(SRCS_DIR) | grep -v Error -B1 || true
 
-test:
-								@make -C $(TEST_DIR)
+tm:
+								@make m -C $(TEST_DIR)
+
+tb:
+								@make b -C $(TEST_DIR)
 
 .PHONY: all clean fclean re norm

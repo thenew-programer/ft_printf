@@ -39,6 +39,9 @@ static void	parse_precision(const char **fmt, t_flags *f)
 
 static void	parse_flags(const char **fmt, t_flags *f)
 {
+	f->flags = 0;
+	f->precision = 0;
+	f->width = 0;
 	while (**fmt != '.' && !ft_strchr(SPECS, **fmt))
 	{
 		if (ft_strchr(FLAGS, **fmt))
@@ -87,6 +90,7 @@ void	parse_fmt(const char *fmt, t_token **head)
 			node->str = ft_substr(fmt, 0, end);
 			fmt += end;
 		}
-		ft_tokenadd_back(head, node);
+		if (node)
+			ft_tokenadd_back(head, node);
 	}
 }
