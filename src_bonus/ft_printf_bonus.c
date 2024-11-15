@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdio.h>
 #include "ft_printf_bonus.h"
 
 void	assign_args(t_token *head, va_list args)
@@ -73,9 +72,9 @@ void	init_spec(t_spec *specs)
 int	ft_printf(const char *fmt, ...)
 {
 	t_token	*tokens;
-	t_token	*tmp;
+	// t_token	*tmp;
 	t_spec	specs[10];
-	// va_list	args;
+	va_list	args;
 	int		printlen;
 
 	if (!fmt)
@@ -83,20 +82,19 @@ int	ft_printf(const char *fmt, ...)
 	tokens = NULL;
 	init_spec(specs);
 	parse_fmt(fmt, &tokens);
-	tmp = tokens;
-	while (tmp)
-	{
-		if (tmp->type == T_TEXT)
-			printf("str = %s\n", tmp->str);
-		else
-		{
-			printf("specifier: %c\n", tmp->specifier);
-			printf("width:     %d\n", tmp->f.width);
-			printf("precision: %d\n", tmp->f.precision);
-		}
-		tmp = tmp->next;
-	}
-	/*
+	// tmp = tokens;
+	// while (tmp)
+	// {
+	// 	if (tmp->type == T_TEXT)
+	// 		printf("str = %s\n", tmp->str);
+	// 	else
+	// 	{
+	// 		printf("specifier: %c\n", tmp->specifier);
+	// 		printf("width:     %d\n", tmp->f.width);
+	// 		printf("precision: %d\n", tmp->f.precision);
+	// 	}
+	// 	tmp = tmp->next;
+	// }
 	va_start(args, fmt);
 	assign_args(tokens, args);
 	tokens = eval_fmt(&tokens, specs);
@@ -104,6 +102,5 @@ int	ft_printf(const char *fmt, ...)
 		return (0);
 	printlen = print_res(tokens);
 	ft_tokenclear(&tokens, free);
-	*/
-	return (printlen = 0, printlen);
+	return (printlen);
 }

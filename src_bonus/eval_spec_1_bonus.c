@@ -13,42 +13,60 @@
 #include "libft.h"
 #include "ft_printf_bonus.h"
 
-char	*eval_char(t_token *elem, t_spec_data data)
+void	eval_char(t_token *elem)
 {
-	char	*str;
-
-	(void)token;
-	str = (char *)malloc(sizeof(char) * 2);
-	if (!str)
-		return (NULL);
-	str[0] = data.c;
-	str[1] = '\0';
-	return (str);
+	elem->str = (char *)malloc(sizeof(char) * 2);
+	if (!elem->str)
+		return ;
+	elem->str[0] = elem->data.c;
+	elem->str[1] = '\0';
+	handle_width(elem);
 }
 
-char	*eval_str(const char *token, t_spec_data data)
+void	eval_str(t_token *elem)
 {
-	char	*str;
-
-	(void)token;
-	str = ft_strdup(data.str);
-	return (str);
+	if (!elem->data.str)
+	{
+		elem->str = ft_strdup("(null)");
+		return ;
+	}
+	elem->str = ft_strdup(elem->data.str);
+	if (!elem->str)
+		return ;
+	handle_precision(elem);
+	handle_width(elem);
 }
 
-char	*eval_int(const char *token, t_spec_data data)
+void	eval_int(t_token *elem)
 {
-	char	*str;
+	char	*tmp;
 
-	(void)token;
-	str = ft_itoa(data.i);
-	return (str);
+	elem->str = ft_itoa(elem->data.i);
+	if ((elem->f.flags & FLAG_PLUS) == FLAG_PLUS)
+	{
+		tmp = elem->str;
+		elem->str = ft_strjoin("+", elem->str);
+		free(tmp);
+	}
+	if (!elem->str)
+		return ;
+	handle_precision(elem);
+	handle_width(elem);
 }
 
-char	*eval_uint(const char *token, t_spec_data data)
+void	eval_uint(t_token *elem)
 {
-	char	*str;
+	char	*tmp;
 
-	(void)token;
-	str = ft_utoa(data.u);
-	return (str);
+	elem->str = ft_utoa(elem->data.u);
+	if ((elem->f.flags & FLAG_PLUS) == FLAG_PLUS)
+	{
+		tmp = elem->str;
+		elem->str = ft_strjoin("+", elem->str);
+		free(tmp);
+	}
+	if (!elem->str)
+		return ;
+	handle_precision(elem);
+	handle_width(elem);
 }

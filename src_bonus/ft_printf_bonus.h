@@ -63,7 +63,7 @@ typedef struct s_fmt_token
 typedef struct s_spec
 {
 	char	specifier;
-	char	*(*eval)(const char *, t_spec_data);
+	void	(*eval)(t_token *);
 }	t_spec;
 
 /* main function */
@@ -85,18 +85,18 @@ int		ft_strchar(char *str, int c);
 char	*ft_putptr(uintptr_t ptr);
 size_t	ft_num_len(unsigned long nb, size_t base);
 char	*ft_print_hex(char *base, unsigned int num);
-int		ft_print_str(char *str, int length);
+void	handle_width(t_token *elem);
+void	handle_precision(t_token *elem);
 
 /* specifier's functions*/
-char	*eval_char(const char *token, t_spec_data data);
-char	*eval_str(const char *token, t_spec_data data);
-char	*eval_int(const char *token, t_spec_data data);
-char	*eval_uint(const char *token, t_spec_data data);
-char	*eval_ptr(const char *token, t_spec_data data);
-char	*eval_hex(const char *token, t_spec_data data);
-char	*eval_HEX(const char *token, t_spec_data data);
-char	*eval_percent(const char *token, t_spec_data data);
-char	*eval_spec(char sp, t_spec_data data, t_spec *specs);
+void	eval_char(t_token *elem);
+void	eval_str(t_token *elem);
+void	eval_int(t_token *elem);
+void	eval_uint(t_token *elem);
+void	eval_ptr(t_token *elem);
+void	eval_hex(t_token *elem);
+void	eval_percent(t_token *elem);
+void	eval_spec(t_token *elem, t_spec *specs);
 t_token	*eval_fmt(t_token **head, t_spec *specs);
 
 #endif

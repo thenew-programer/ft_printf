@@ -90,46 +90,70 @@ void	handle_width(t_token *elem)
 {
 	char	*width;
 	char	*tmp;
+	int		len;
 
 	if (elem->f.width <= 0)
 		return ;
-	width = (char *)malloc(sizeof(char) * (elem->f.width + 1));
+	len = elem->f.width - ft_strlen(elem->str);
+	if (len <= 0)
+		return ;
+	width = (char *)malloc(sizeof(char) * (len + 1));
 	if (!width)
 	  return ;
-	width[elem->f.width] = '\0';
+	width[len] = '\0';
 	if ((elem->f.flags & FLAG_ZERO) == FLAG_ZERO)
-		ft_memset(width, 48, elem->f.width);
+		ft_memset(width, 48, len);
 	else
-		ft_memset(width, 32, elem->f.width);
+		ft_memset(width, 32, len);
 	tmp = elem->str;
-	if ((elem->f.flags & FLAG_MINUS) == FLAG_MINUS)
+	if ((elem->f.flags & FLAG_MINUS) == FLAG_MINUS
+		&&(elem->f.flags & FLAG_ZERO) != FLAG_ZERO)
 		elem->str = ft_strjoin(elem->str, width);
 	else
 		elem->str = ft_strjoin(width, elem->str);
 	free(tmp);
 }
 
-void	handle_precision(t_token *elem)
+char	*str_precision(char *str, int len)
+{
+	char	*precision;
+
+	precision = ft_substr(str, 0, len);
+	if (!precision)
+		return (NULL);
+	return (precision);
+}
+
+char	*int_precision(char *str, int len)
 {
 	char	*precision;
 	char	*tmp;
 
-	if (precision <= 0)
-		return ;
-	precision = (char *)malloc(sizeof(char) * (elem->f.precision + 2));
+	precision = (char *)malloc(sizeof(char) * (len + 2));
 	if (!precision)
+	{
+		free(str);
+		return (NULL);
+	}
+	precision[0] = '.';
+	precision[len + 1] = '\0';
+	tmp = str;
+	str = ft_strjoin(str, precision);
+	free(tmp);
+	free(precision);
+	return (str);
+}
+
+void	handle_precision(t_token *elem)
+{
+	char	*tmp;
+
+	if (elem->f.precision <= 0)
 		return ;
 	tmp = elem->str;
 	if (ft_strchr("diu", elem->specifier))
-	{
-		precision[0] = '.';
-		precision[elem->f.precision + 1] = '\0';
-		ft_memset(precision + 1, '0', elem->f.precision);
-		elem->str = ft_strjoin(tmp, precision);
-	}
+		elem->str = int_precision(elem->str, elem->f.precision);
 	else if (ft_strchr("s", elem->specifier))
-	{
-
-	}
+		elem->str = str_precision(elem->str, elem->f.precision);
 	free(tmp);
 }

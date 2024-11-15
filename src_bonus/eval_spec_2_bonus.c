@@ -13,62 +13,60 @@
 #include "ft_printf_bonus.h"
 #include "libft.h"
 
-char	*eval_ptr(const char *token, t_spec_data data)
+void	eval_ptr(t_token *elem)
 {
-	char	*str;
-
-	(void)token;
-	if (!data.ptr)
-		return (ft_strdup("(nil)"));
-	str = ft_putptr((uintptr_t)data.ptr);
-	return (str);
+	if (!elem->data.ptr)
+	{
+		elem->str = ft_strdup("(nil)");
+		return ;
+	}
+	elem->str = ft_putptr((uintptr_t)elem->data.ptr);
+	handle_width(elem);
 }
 
-char	*eval_hex(const char *token, t_spec_data data)
+void	eval_hex(t_token *elem)
 {
-	char	*str;
-	size_t	len;
+	char	*tmp;
 
-	len = ft_strlen(token);
-	if (token[len - 1] == 'x')
-		str = ft_print_hex("0123456789abcdef", data.u);
+	if (elem->specifier == 'x')
+		elem->str = ft_print_hex("0123456789abcdef", elem->data.u);
 	else
-		str = ft_print_hex("0123456789ABCDEF", data.u);
-	return (str);
+		elem->str = ft_print_hex("0123456789ABCDEF", elem->data.u);
+	if ((elem->f.flags & FLAG_ZERO) == FLAG_ZERO)
+		handle_width(elem);
+	if ((elem->f.flags & FLAG_HASH) == FLAG_HASH)
+	{
+		tmp = elem->str;
+		if (elem->specifier == 'x')
+			elem->str = ft_strjoin("0x", elem->str);
+		else if (elem->specifier == 'X')
+			elem->str = ft_strjoin("0X", elem->str);
+		free(tmp);
+	}
+	if ((elem->f.flags & FLAG_ZERO) != FLAG_ZERO)
+		handle_width(elem);
 }
 
-char	*eval_percent(const char *token, t_spec_data data)
+void	eval_percent(t_token *elem)
 {
-	char	*str;
-
-	(void)token;
-	(void)data;
-	str = (char *)malloc(sizeof(char) * 2);
-	if (!str)
-		return (NULL);
-	str[0] = '%';
-	str[1] = '\0';
-	return (str);
+	elem->str = (char *)malloc(sizeof(char) * 2);
+	if (!elem->str)
+		return ;
+	elem->str[0] = '%';
+	elem->str[1] = '\0';
 }
 
-char	*eval_spec(char sp, t_spec_data data, t_spec *specs)
+void	eval_spec(t_token *elem, t_spec *specs)
 {
-	char	*str;
 	int		i;
 
 	i = 0;
 	while (specs[i].specifier != 0)
 	{
-		if (sp == specs[i].specifier)
-		{
-			str = specs[i].eval(&sp, data);
-			if (!str)
-				return (ft_strdup("(null)"));
-			return (str);
-		}
+		if (elem->specifier == specs[i].specifier)
+			specs[i].eval(elem);
 		i++;
 	}
-	return (NULL);
 }
 
 t_token	*eval_fmt(t_token **head, t_spec *specs)
@@ -79,13 +77,9 @@ t_token	*eval_fmt(t_token **head, t_spec *specs)
 	while (curr)
 	{
 		if (curr->type == T_SPEC)
-		{
-			curr->str = eval_spec(curr->specifier, curr->data, specs);
-			// if (!curr->str)
-				// curr->str = curr->token;
-				// curr->token = NULL;
-		}
-		curr->len = ft_strlen(curr->str);
+			eval_spec(curr, specs);
+		if (curr->str)
+			curr->len = ft_strlen(curr->str);
 		curr = curr->next;
 	}
 	return (*head);

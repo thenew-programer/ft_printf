@@ -1,0 +1,6 @@
+*.a
+*.o
+obj
+obj_bonus
+a.out
+*.c
