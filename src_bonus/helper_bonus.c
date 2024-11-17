@@ -12,6 +12,14 @@
 
 #include "ft_printf_bonus.h"
 #include "libft.h"
+#include <stdio.h>
+
+int	ft_check_flag(int flags, int flag)
+{
+	if ((flags & flag) == flag)
+		return (TRUE);
+	return (FALSE);
+}
 
 int	ft_strchar(char *str, int c)
 {
@@ -92,54 +100,44 @@ void	handle_width(t_token *elem)
 	char	*tmp;
 	int		len;
 
-	if (elem->f.width <= 0)
-		return ;
 	len = elem->f.width - ft_strlen(elem->str);
-	if (len <= 0)
+	if (elem->f.width <= 0 || len <= 0)
 		return ;
-	width = (char *)malloc(sizeof(char) * (len + 1));
+	width = (char *)ft_calloc(sizeof(char), (len + 1));
 	if (!width)
 	  return ;
-	width[len] = '\0';
-	if ((elem->f.flags & FLAG_ZERO) == FLAG_ZERO)
-		ft_memset(width, 48, len);
-	else
-		ft_memset(width, 32, len);
 	tmp = elem->str;
-	if ((elem->f.flags & FLAG_MINUS) == FLAG_MINUS)
-		elem->str = ft_strjoin(elem->str, width);
+	if (ft_check_flag(elem->f.flags, FLAG_ZERO) && elem->specifier != 's'
+		&& elem->specifier != 'c')
+	{
+		ft_memset(width, '0', len);
+		elem->str = ft_strjoin(width, tmp);
+	}
+	else if (ft_check_flag(elem->f.flags, FLAG_MINUS))
+	{
+		ft_memset(width, ' ', len);
+		elem->str = ft_strjoin(tmp, width);
+	}
 	else
-		elem->str = ft_strjoin(width, elem->str);
+	{
+		ft_memset(width, ' ', len);
+		elem->str = ft_strjoin(width, tmp);
+	}
 	free(width);
 	free(tmp);
 }
 
-char	*str_precision(char *str, int len)
+char	*int_precision(char *str, int prc)
 {
 	char	*precision;
+	int		len;
 
-	precision = ft_substr(str, 0, len);
+	len = prc - ft_strlen(str);
+	precision = (char *)ft_calloc(sizeof(char), (len + 1));
 	if (!precision)
 		return (NULL);
-	return (precision);
-}
-
-char	*int_precision(char *str, int len)
-{
-	char	*precision;
-	char	*tmp;
-
-	precision = (char *)malloc(sizeof(char) * (len + 2));
-	if (!precision)
-	{
-		free(str);
-		return (NULL);
-	}
-	precision[0] = '.';
-	precision[len + 1] = '\0';
-	tmp = str;
-	str = ft_strjoin(str, precision);
-	free(tmp);
+	ft_memset(precision, '0', len);
+	str = ft_strjoin(precision, len);
 	free(precision);
 	return (str);
 }
@@ -148,12 +146,14 @@ void	handle_precision(t_token *elem)
 {
 	char	*tmp;
 
-	if (elem->f.precision <= 0)
+	if (elem->f.precision <= 0 || !*elem->str)
 		return ;
 	tmp = elem->str;
 	if (ft_strchr("diu", elem->specifier))
+		if (ft_strlen(str) <= elem->f.precision)
+			return ;
 		elem->str = int_precision(elem->str, elem->f.precision);
 	else if (ft_strchr("s", elem->specifier))
-		elem->str = str_precision(elem->str, elem->f.precision);
+		elem->str = ft_substr(elem->str, 0, elem->f.precision);
 	free(tmp);
 }

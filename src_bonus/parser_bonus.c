@@ -39,9 +39,6 @@ static void	parse_precision(const char **fmt, t_flags *f)
 
 static void	parse_flags(const char **fmt, t_flags *f)
 {
-	f->flags = 0;
-	f->precision = 0;
-	f->width = 0;
 	while (**fmt != '.' && !ft_strchr(SPECS, **fmt))
 	{
 		if (ft_strchr(FLAGS, **fmt))
@@ -50,19 +47,20 @@ static void	parse_flags(const char **fmt, t_flags *f)
 				f->flags |= FLAG_MINUS;
 			if (**fmt == '+')
 				f->flags |= FLAG_PLUS;
-			if (**fmt == '0')
+			if (**fmt == '0' && !ft_isdigit(*(*fmt - 1))
+				&& !ft_check_flag(f->flags, FLAG_MINUS))
 				f->flags |= FLAG_ZERO;
 			if (**fmt == ' ')
 				f->flags |= FLAG_SPACE;
 			if (**fmt == '#')
 				f->flags |= FLAG_HASH;
+			(*fmt)++;
 		}
 		while (ft_isdigit(**fmt))
 		{
 			f->width = (f->width * 10) + (**fmt - '0');
 			(*fmt)++;
 		}
-		(*fmt)++;
 	}
 }
 

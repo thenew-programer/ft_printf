@@ -20,6 +20,8 @@ void	eval_char(t_token *elem)
 		return ;
 	elem->str[0] = elem->data.c;
 	elem->str[1] = '\0';
+	if (elem->data.c == 0)
+		elem->len += 1;
 	handle_width(elem);
 }
 
@@ -42,7 +44,8 @@ void	eval_int(t_token *elem)
 	char	*tmp;
 
 	elem->str = ft_itoa(elem->data.i);
-	if ((elem->f.flags & FLAG_PLUS) == FLAG_PLUS)
+	if (ft_check_flag(elem->f.flags, FLAG_PLUS) && elem->data.i > 0
+		&& !ft_check_flag(elem->f.flags, FLAG_ZERO))
 	{
 		tmp = elem->str;
 		elem->str = ft_strjoin("+", elem->str);
@@ -50,23 +53,13 @@ void	eval_int(t_token *elem)
 	}
 	if (!elem->str)
 		return ;
-	handle_precision(elem);
 	handle_width(elem);
+	handle_precision(elem);
 }
 
 void	eval_uint(t_token *elem)
 {
-	char	*tmp;
-
 	elem->str = ft_utoa(elem->data.u);
-	if ((elem->f.flags & FLAG_PLUS) == FLAG_PLUS)
-	{
-		tmp = elem->str;
-		elem->str = ft_strjoin("+", elem->str);
-		free(tmp);
-	}
-	if (!elem->str)
-		return ;
-	handle_precision(elem);
 	handle_width(elem);
+	handle_precision(elem);
 }

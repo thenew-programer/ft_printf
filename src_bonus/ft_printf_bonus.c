@@ -48,10 +48,8 @@ int	print_res(t_token *head)
 	while (head)
 	{
 		curr = head;
-		if (curr->len == 0 && curr->specifier == 'c')
-			curr->len++;
-		if (curr->str)
-			len += write(1, curr->str, curr->len);
+		write(1, curr->str, curr->len);
+		len += curr->len;
 		head = head->next;
 	}
 	return (len);
@@ -90,14 +88,20 @@ int	ft_printf(const char *fmt, ...)
 	if (!tokens)
 		return (0);
 	// tmp = tokens;
-	printlen = 0;
+	// printlen = 0;
 	// while (tmp)
 	// {
-	// 	if (tmp->type = T_TEXT)
+	// 	if (tmp->type == T_TEXT)
 	// 		printlen += printf("%s\n", tmp->str);
+	// 	else
+	// 	{
+	// 		printf("specifier	= %c\n", tmp->specifier);
+	// 		printf("precision	= %d\n", tmp->f.precision);
+	// 		printf("width		= %d\n", tmp->f.width);
+	// 	}
 	// 	tmp = tmp->next;
 	// }
-	// printlen = print_res(tokens);
-	// ft_tokenclear(&tokens, free);
+	printlen = print_res(tokens);
+	ft_tokenclear(&tokens, free);
 	return (printlen);
 }

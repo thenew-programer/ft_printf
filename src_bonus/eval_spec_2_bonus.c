@@ -11,7 +11,6 @@
 /* ************************************************************************** */
 
 #include "ft_printf_bonus.h"
-#include <stdio.h>
 #include "libft.h"
 
 void	eval_ptr(t_token *elem)
@@ -83,8 +82,7 @@ t_token	*eval_fmt(t_token **head, t_spec *specs)
 		if (curr->type == T_SPEC)
 			eval_spec(curr, specs);
 		if (curr->str)
-			curr->len = ft_strlen(curr->str);
-		printf("%s", curr->str);
+			curr->len += ft_strlen(curr->str);
 		curr = curr->next;
 	}
 	return (*head);

@@ -87,6 +87,7 @@ size_t	ft_num_len(unsigned long nb, size_t base);
 char	*ft_print_hex(char *base, unsigned int num);
 void	handle_width(t_token *elem);
 void	handle_precision(t_token *elem);
+int		ft_check_flag(int flags, int flag);
 
 /* specifier's functions*/
 void	eval_char(t_token *elem);

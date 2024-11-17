@@ -19,11 +19,12 @@ t_token	*ft_tokenew(int type)
 	new = (t_token *)malloc(sizeof(t_token));
 	if (!new)
 		return (NULL);
-	new->str = 0;
 	new->type = type;
 	new->str = NULL;
+	new->len = 0;
 	new->specifier = 0;
 	new->next = NULL;
+	new->f = (t_flags){0, 0, 0};
 	return (new);
 }
 
