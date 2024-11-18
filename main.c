@@ -1,5 +1,7 @@
 #include "ft_printf_bonus.h"
 #include <stdio.h>
+#include <string.h>
+#include <errno.h>
 
 int	main()
 {
@@ -82,6 +84,9 @@ int	main()
     ft_printf("\tft_printf: %10c %4c %02x\n", 'A', 'B', 255);  // Width & padding flags
     printf("\t   printf: %10c %4c %02x\n", 'A', 'B', 255);
 
+	ft_printf("category m:\n");
+	ft_printf("\tft_printf: %s\n", strerror(errno));
+	printf("\t   printf: %m\n");
     ft_printf("category NULL:\n");
     printf(NULL);
     ft_printf(NULL);

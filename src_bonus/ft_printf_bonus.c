@@ -39,17 +39,33 @@ void	assign_args(t_token *head, va_list args)
 	va_end(args);
 }
 
+void	init_print(t_spec_print *specs)
+{
+	specs[0] = (t_spec_print){'c', print_char};
+	specs[1] = (t_spec_print){'s', print_str};
+	specs[2] = (t_spec_print){'d', print_int};
+	specs[3] = (t_spec_print){'i', print_int};
+	specs[4] = (t_spec_print){'u', print_int};
+	specs[5] = (t_spec_print){'x', print_hex};
+	specs[6] = (t_spec_print){'X', print_hex};
+	specs[7] = (t_spec_print){'p', print_ptr};
+	specs[8] = (t_spec_print){'%', print_str};
+	specs[9] = (t_spec_print){0, NULL};
+}
+
 int	print_res(t_token *head)
 {
 	t_token	*curr;
 	int		len;
 
 	len = 0;
+		init_print();
 	while (head)
 	{
 		curr = head;
-		write(1, curr->str, curr->len);
-		len += curr->len;
+		len += print(head);
+		// write(1, curr->str, curr->len);
+		// len += curr->len;
 		head = head->next;
 	}
 	return (len);
@@ -72,7 +88,6 @@ void	init_spec(t_spec *specs)
 int	ft_printf(const char *fmt, ...)
 {
 	t_token	*tokens;
-	// t_token	*tmp;
 	t_spec	specs[10];
 	va_list	args;
 	int		printlen;
@@ -87,20 +102,6 @@ int	ft_printf(const char *fmt, ...)
 	tokens = eval_fmt(&tokens, specs);
 	if (!tokens)
 		return (0);
-	// tmp = tokens;
-	// printlen = 0;
-	// while (tmp)
-	// {
-	// 	if (tmp->type == T_TEXT)
-	// 		printlen += printf("%s\n", tmp->str);
-	// 	else
-	// 	{
-	// 		printf("specifier	= %c\n", tmp->specifier);
-	// 		printf("precision	= %d\n", tmp->f.precision);
-	// 		printf("width		= %d\n", tmp->f.width);
-	// 	}
-	// 	tmp = tmp->next;
-	// }
 	printlen = print_res(tokens);
 	ft_tokenclear(&tokens, free);
 	return (printlen);

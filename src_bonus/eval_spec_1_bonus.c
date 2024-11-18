@@ -21,7 +21,7 @@ void	eval_char(t_token *elem)
 	elem->str[0] = elem->data.c;
 	elem->str[1] = '\0';
 	if (elem->data.c == 0)
-		elem->len += 1;
+		elem->len++;
 	handle_width(elem);
 }
 

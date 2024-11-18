@@ -34,7 +34,7 @@ void	eval_hex(t_token *elem)
 		elem->str = ft_print_hex("0123456789ABCDEF", elem->data.u);
 	if ((elem->f.flags & FLAG_ZERO) == FLAG_ZERO)
 		handle_width(elem);
-	if ((elem->f.flags & FLAG_HASH) == FLAG_HASH)
+	if ((elem->f.flags & FLAG_HASH) == FLAG_HASH && elem->data.u > 0)
 	{
 		tmp = elem->str;
 		if (elem->specifier == 'x')

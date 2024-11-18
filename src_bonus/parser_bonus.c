@@ -54,13 +54,22 @@ static void	parse_flags(const char **fmt, t_flags *f)
 				f->flags |= FLAG_SPACE;
 			if (**fmt == '#')
 				f->flags |= FLAG_HASH;
-			(*fmt)++;
 		}
-		while (ft_isdigit(**fmt))
-		{
-			f->width = (f->width * 10) + (**fmt - '0');
-			(*fmt)++;
-		}
+		(*fmt)++;
+		// while (ft_isdigit(**fmt))
+		// {
+		// 	f->width = (f->width * 10) + (**fmt - '0');
+		// 	(*fmt)++;
+		// }
+	}
+}
+
+void	parse_width(const char **fmt, t_flags *f)
+{
+	while (ft_isdigit(**fmt))
+	{
+		f->width = (f->width * 10) + (**fmt - '0');
+		(*fmt)++;
 	}
 }
 
@@ -76,6 +85,7 @@ void	parse_fmt(const char *fmt, t_token **head)
 			fmt++;
 			node = ft_tokenew(T_SPEC);
 			parse_flags(&fmt, &node->f);
+			parse_width(&fmt, &node->f);
 			parse_precision(&fmt, &node->f);
 			parse_specifier(&fmt, &node->specifier);
 		}

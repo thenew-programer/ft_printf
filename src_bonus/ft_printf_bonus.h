@@ -66,6 +66,12 @@ typedef struct s_spec
 	void	(*eval)(t_token *);
 }	t_spec;
 
+typedef struct s_spec_print
+{
+	char	specifier;
+	int		(*eval)(t_token *);
+}	t_spec_print;
+
 /* main function */
 int		ft_printf(const char *fmt, ...);
 

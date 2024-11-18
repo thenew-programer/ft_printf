@@ -11,7 +11,7 @@ MANDATORY		= c s p d i u x upperx percent mix
 
 BONUS			= minus 0 dot sharp space +
 
-CC				= clang++ -std=c11 -Wno-everything
+CC			= g++ -Wno-everything
 CFLAGS			= -g3 -ldl -std=c++11 -I utils/ -I.. $(addprefix -I, $(shell find .. -regex ".*/.*\.h" | grep -oh ".*\/"))
 
 TEST_NUMBER := $(wordlist 2, $(words $(MAKECMDGOALS)), $(MAKECMDGOALS))
@@ -48,7 +48,7 @@ $(addprefix docker, $(MANDATORY)) $(addprefix docker, $(BONUS)) dockerm dockerb 
 	@docker rm -f mc > /dev/null 2>&1
 	docker build -t mi .
 	docker run -dti --name mc -v $(shell dirname $(shell pwd)):/project/ mi
-	docker exec -ti mc make $* $(TEST_NUMBER) -C printfTester
+	docker exec -ti mc make $* $(TEST_NUMBER) -C test
 	@docker rm -f mc > /dev/null 2>&1
 
 m: $(MANDATORY) 
